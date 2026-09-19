@@ -49,36 +49,73 @@ layout = [
     [sg.Button("CLOSE")]
 ]
 
-window = sg.Window("Karel The Robot", layout, margins=(100, 100))
+window = sg.Window("Karel The Robot", layout, margins=(10, 10))
 
 while 1:
     event, values = window.read()
 
     if event == base_commands[0]:
         if karel_direction == "right":
-             old_x = karel_x
-             karel_x += 1
+             if karel_x < 9:
+                old_x = karel_x
+                karel_x += 1
 
-             window[f"FIELD_{old_x}_{karel_y}"].update(
+                window[f"FIELD_{old_x}_{karel_y}"].update(
                 filename="assets/field.png"
-             )
+                )
 
-             window[f"FIELD_{karel_x}_{karel_y}"].update(
+                window[f"FIELD_{karel_x}_{karel_y}"].update(
                 filename=karel_sprites[karel_direction]
-             )
+                )
+             else:
+                print(f"Nemůžu učinit {base_commands[0]}, přede mnou je zeď.")
 
              print("Karel se pohnul v ose X o 1!")
         elif karel_direction == "left":
-            karel_x -= 1
+            if karel_x > 0:
+                old_x = karel_x
+                karel_x -= 1
+                window[f"FIELD_{old_x}_{karel_y}"].update(
+                filename="assets/field.png"
+                )
+
+                window[f"FIELD_{karel_x}_{karel_y}"].update(
+                filename=karel_sprites[karel_direction]
+                )
+            else:
+                print(f"Nemůžu učinit {base_commands[0]}, přede mnou je zeď.")
+
             print("Karel se pohnul v ose X o -1!")
         elif karel_direction == "front":
-            karel_y -= 1
-            print("Karel se pohnul v ose Y o -1!")
-        elif karel_direction == "back":
-            karel_y += 1
+            if karel_y < 9:
+                old_y = karel_y
+                karel_y += 1
+                window[f"FIELD_{karel_x}_{old_y}"].update(
+                    filename="assets/field.png"
+                )
+
+                window[f"FIELD_{karel_x}_{karel_y}"].update(
+                     filename=karel_sprites[karel_direction]
+                )
+            else:
+                print(f"Nemůžu učinit {base_commands[0]}, přede mnou je zeď.")
             print("Karel se pohnul v ose Y o 1!")
+        elif karel_direction == "back":
+            if karel_y > 0:
+                old_y = karel_y
+                karel_y -= 1
+                window[f"FIELD_{karel_x}_{old_y}"].update(
+                    filename="assets/field.png"
+                )
+
+                window[f"FIELD_{karel_x}_{karel_y}"].update(
+                    filename=karel_sprites[karel_direction]
+                )
+            else:
+                print(f"Nemůžu učinit {base_commands[0]}, přede mnou je zeď.")
+            print("Karel se pohnul v ose Y o -1!")
         else: 
-            print("zatim nic")
+            print("Jiná direction neexistuje :skull: !")
 
     if event == base_commands[1]:
         if karel_direction == "right":
